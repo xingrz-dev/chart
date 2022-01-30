@@ -1,3 +1,6 @@
 location: home
 replicas: 1
-ports: {}
+container: {}
+service: {}
+volumes: {}
+domain: {}

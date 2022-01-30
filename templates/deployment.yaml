@@ -20,10 +20,18 @@ spec:
         xingrz/location: {{ .Values.location }}
     spec:
       containers:
-        - name: {{ .Values.name }}
-          image: {{ .Values.image }}
-          ports:
-            {{- toYaml .Values.ports | nindent 12 }}
+      - name: {{ .Values.name }}
+        image: {{ .Values.image }}
+        {{- if .Values.container }}
+        {{- toYaml .Values.container | nindent 8 }}
+        {{- end }}
+      {{- if .Values.volumes }}
+      volumes:
+        {{- toYaml .Values.volumes | nindent 6 }}
+      {{- end }}
+      {{- if .Values.deployment }}
+      {{- toYaml .Values.deployment | nindent 6 }}
+      {{- end }}
       imagePullSecrets:
       - name: aliyun-container-registry
       nodeSelector:

@@ -1,0 +1,15 @@
+{{- if .Values.service }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.name }}
+  namespace: app-{{ .Values.location }}
+  labels:
+    xingrz/app: {{ .Values.name }}
+    xingrz/location: {{ .Values.location }}
+spec:
+  {{- toYaml .Values.service | nindent 2 }}
+  selector:
+    xingrz/app: {{ .Values.name }}
+    xingrz/location: {{ .Values.location }}
+{{- end }}
