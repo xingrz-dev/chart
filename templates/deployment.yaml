@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.name }}
+  namespace: app-{{ .Values.location }}
+  labels:
+    xingrz/app: {{ .Values.name }}
+    xingrz/location: {{ .Values.location }}
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      xingrz/app: {{ .Values.name }}
+      xingrz/location: {{ .Values.location }}
+  template:
+    metadata:
+      name: {{ .Values.name }}
+      labels:
+        xingrz/app: {{ .Values.name }}
+        xingrz/location: {{ .Values.location }}
+    spec:
+      containers:
+        - name: {{ .Values.name }}
+          image: {{ .Values.image }}
+          ports:
+            {{- toYaml .Values.ports | nindent 12 }}
+      imagePullSecrets:
+      - name: aliyun-container-registry
+      nodeSelector:
+        xingrz/location: {{ .Values.location }}
