@@ -1,4 +1,5 @@
 {{- if .Values.domain }}
+{{- if .Values.domain.host }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -15,4 +16,11 @@ spec:
             port:
               number: 80
         pathType: ImplementationSpecific
+  {{- if .Values.domain.tls }}
+  tls:
+  - hosts:
+    - {{ .Values.domain.host }}
+    secretName: tls-{{ .Values.name }}-ingress
+  {{- end }}
+{{- end }}
 {{- end }}
