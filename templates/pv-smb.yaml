@@ -1,0 +1,29 @@
+{{- range $name, $mount := .Values.mounts }}
+{{- if eq $mount.type "smb" }}
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ $.Values.name }}-pv-{{ $name }}
+  namespace: app-{{ $.Values.location }}
+spec:
+  capacity:
+    storage: {{ $mount.limit }}
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  mountOptions:
+    - dir_mode=0755
+    - file_mode=0644
+    - vers=3.0
+  csi:
+    driver: smb.csi.k8s.io
+    readOnly: false
+    volumeHandle: {{ $.Values.name }}-smb
+    volumeAttributes:
+      source: {{ $mount.source }}
+    nodeStageSecretRef:
+      name: {{ $mount.secret }}
+      namespace: default
+{{- end }}
+{{- end }}

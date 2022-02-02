@@ -2,5 +2,5 @@ location: home
 replicas: 1
 container: {}
 service: {}
-volumes: {}
 domain: {}
+mounts: []

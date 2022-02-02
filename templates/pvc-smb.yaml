@@ -1,0 +1,20 @@
+{{- range $name, $mount := .Values.mounts }}
+{{- if eq $mount.type "smb" }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ $.Values.name }}-pvc-{{ $name }}
+  namespace: app-{{ $.Values.location }}
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: {{ $mount.request }}
+    limits:
+      storage: {{ $mount.limit }}
+  volumeName: {{ $.Values.name }}-pv-{{ $name }}
+  storageClassName: ""
+{{- end }}
+{{- end }}

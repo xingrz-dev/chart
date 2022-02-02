@@ -25,9 +25,22 @@ spec:
         {{- if .Values.container }}
         {{- toYaml .Values.container | nindent 8 }}
         {{- end }}
-      {{- if .Values.volumes }}
+        {{- if .Values.mounts }}
+        volumeMounts:
+          {{- range $name, $mount := .Values.mounts }}
+          {{- if $mount.mount }}
+        - name: {{ $name }}
+          mountPath: {{ $mount.mount }}
+          {{- end }}
+          {{- end }}
+        {{- end }}
+      {{- if .Values.mounts }}
       volumes:
-        {{- toYaml .Values.volumes | nindent 6 }}
+        {{- range $name, $mount := .Values.mounts }}
+      - name: {{ $name }}
+        persistentVolumeClaim:
+          claimName: {{ $.Values.name }}-pvc-{{ $name }}
+        {{- end }}
       {{- end }}
       {{- if .Values.deployment }}
       {{- toYaml .Values.deployment | nindent 6 }}
