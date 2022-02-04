@@ -49,3 +49,6 @@ spec:
       - name: aliyun-container-registry
       nodeSelector:
         xingrz/location: {{ .Values.location }}
+        {{- if .Values.selector }}
+        {{- toYaml .Values.selector | nindent 8 }}
+        {{- end }}

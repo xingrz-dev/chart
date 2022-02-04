@@ -1,5 +1,6 @@
 location: home
 replicas: 1
+selector: {}
 container: {}
 service: {}
 domain: {}
