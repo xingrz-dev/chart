@@ -1,0 +1,20 @@
+{{- range $i, $publish := .Values.publish }}
+{{- if eq $publish.target "node" }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $.Values.name }}-externel
+  namespace: app-{{ $.Values.location }}
+  labels:
+    xingrz/app: {{ $.Values.name }}
+    xingrz/location: {{ $.Values.location }}
+spec:
+  type: NodePort
+  ports:
+    {{- toYaml $publish.ports | nindent 4 }}
+  selector:
+    xingrz/app: {{ $.Values.name }}
+    xingrz/location: {{ $.Values.location }}
+{{- end }}
+{{- end }}
