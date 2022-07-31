@@ -1,5 +1,4 @@
-{{- if .Values.domain }}
-{{- if .Values.domain.host }}
+{{- if .Values.domains }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -7,20 +6,23 @@ metadata:
   namespace: app-{{ .Values.location }}
 spec:
   rules:
-  - host: {{ .Values.domain.host }}
+  {{- range $domain := .Values.domains }}
+  - host: {{ $domain.host }}
     http:
       paths:
       - backend:
           service:
-            name: {{ .Values.name }}
+            name: {{ $.Values.name }}
             port:
               number: 80
         pathType: ImplementationSpecific
-  {{- if .Values.domain.tls }}
-  tls:
-  - hosts:
-    - {{ .Values.domain.host }}
-    secretName: tls-{{ .Values.name }}-ingress
   {{- end }}
-{{- end }}
+  tls:
+  {{- range $domain := .Values.domains }}
+  {{- if $domain.tls }}
+  - hosts:
+    - {{ $domain.host }}
+    secretName: {{ $domain.host }}
+  {{- end }}
+  {{- end }}
 {{- end }}

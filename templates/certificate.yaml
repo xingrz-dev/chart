@@ -1,15 +1,16 @@
-{{- if .Values.domain }}
-{{- if and .Values.domain.host .Values.domain.tls }}
+{{- range $domain := .Values.domains }}
+{{- if and $domain.host $domain.tls }}
+---
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: tls-{{ .Values.name }}-ingress
+  name: {{ $domain.host }}
   namespace: app-home
 spec:
-  secretName: tls-{{ .Values.name }}-ingress
-  commonName: {{ .Values.domain.host }}
+  secretName: {{ $domain.host }}
+  commonName: {{ $domain.host }}
   dnsNames:
-  - {{ .Values.domain.host }}
+  - {{ $domain.host }}
   issuerRef:
     name: letsencrypt
     kind: ClusterIssuer

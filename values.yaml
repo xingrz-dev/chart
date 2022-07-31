@@ -3,5 +3,5 @@ replicas: 1
 selector: {}
 container: {}
 publish: []
-domain: {}
+domains: []
 mounts: []
