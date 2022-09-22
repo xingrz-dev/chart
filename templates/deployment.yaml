@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
       - name: {{ .Values.name }}
-        image: {{ .Values.image }}
+        image: {{ .Values.registry }}/{{ .Values.image }}
         {{- if .Values.container }}
         {{- toYaml .Values.container | nindent 8 }}
         {{- end }}
@@ -46,7 +46,7 @@ spec:
       {{- toYaml .Values.deployment | nindent 6 }}
       {{- end }}
       imagePullSecrets:
-      - name: aliyun-container-registry
+      - name: {{ .Values.registry }}
       nodeSelector:
         xingrz/location: {{ .Values.location }}
         {{- if .Values.selector }}
