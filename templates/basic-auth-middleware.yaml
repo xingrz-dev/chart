@@ -1,0 +1,13 @@
+{{- range $domain := .Values.domains }}
+{{- if $domain.basic_auth }}
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: {{ $domain.host | replace "." "-" }}-basic-auth
+  namespace: app-{{ $.Values.location }}
+spec:
+  basicAuth:
+    secret: {{ $domain.host }}-basic-auth-secret
+{{- end }}
+{{- end }}
